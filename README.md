@@ -50,6 +50,19 @@ Coming from `zmod_ad5x_theme`? Run `DISABLE_PLUGIN name=zmod_ad5x_theme`
 first, so it puts your old theme back, then enable `ff_themes`. The
 installer stops and tells you to do this if it finds the old plugin's theme.
 
+### Theme doesn't show up
+
+On Zmod, Mainsail sometimes keeps showing the old theme after an install,
+an update or a hand upload, even after Ctrl+F5. Mainsail loads the theme
+last, after the config file list, and it doesn't always pick up the new
+files. To make the theme active:
+
+1. Open **Machine**, and in the **Config Files** panel click refresh.
+2. Open the `.theme` folder (turn on **Show hidden files** under the gear
+   icon if you can't see it) and click refresh again.
+
+The new theme appears.
+
 ### Uninstall
 
 Run `DISABLE_PLUGIN name=ff_themes`. Your previous theme comes back, or
@@ -153,7 +166,8 @@ back over the folder, and your logo goes with it.
 5. Reload Mainsail with Ctrl+F5.
 
 On Zmod, `.theme` in the config root is a link to `mod_data/.theme`, so the
-files end up there. That's expected.
+files end up there. That's expected. If the old theme is still showing,
+see [Theme doesn't show up](#theme-doesnt-show-up).
 
 ### Copy with scp
 
@@ -180,7 +194,8 @@ The last line matters on Kiln: files copied in as root are owned by root
 and readable only by root, so Moonraker, which runs as `klipper`, can't
 serve them to Mainsail.
 
-Reload Mainsail with Ctrl+F5.
+Reload Mainsail with Ctrl+F5. On Zmod, if the old theme is still showing,
+see [Theme doesn't show up](#theme-doesnt-show-up).
 
 ## Adding a theme
 
