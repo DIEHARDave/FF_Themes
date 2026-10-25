@@ -26,8 +26,8 @@ folder in the config files:
 Kiln OS ships Fluidd as its main web UI, so the Kiln theme has a Fluidd
 part too, in `fluidd-themes/kiln-ad5x`. It puts the Mainsail theme's logo
 in Fluidd's top bar in place of Fluidd's own logo, and the Kiln OS icon
-(`logos/kiln-os-icon.svg`) in place of the faint Fluidd logo in the page's
-bottom right corner. That one only shows while **Show background logo** is
+in place of the faint Fluidd logo in the page's bottom right corner,
+a bit smaller and closer to the corner than Fluidd's. That one only shows while **Show background logo** is
 on in Fluidd's theme settings (the default).
 
 Fluidd reads only `custom.css` and `background.*` from its `.fluidd-theme`
@@ -38,8 +38,13 @@ to fit, and does the same for the background logo.
 a background logo:
 
 ```sh
-python3 tools/fluidd_logo_css.py themes/kiln-ad5x/sidebar-logo.svg fluidd-themes/kiln-ad5x/custom.css logos/kiln-os-icon.svg
+python3 tools/fluidd_logo_css.py themes/kiln-ad5x/sidebar-logo.svg fluidd-themes/kiln-ad5x/custom.css logos/kiln-os-icon-background.svg
 ```
+
+The background logo is drawn fully opaque, so its file carries its own
+transparency: `logos/kiln-os-icon-background.svg` is `logos/kiln-os-icon.svg`
+with the black at 75% opacity and the blue at 12%. Change those `opacity`
+values to make either color stronger or fainter.
 
 ## Zmod
 

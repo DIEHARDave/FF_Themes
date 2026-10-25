@@ -6,7 +6,7 @@
 # data URIs.
 #
 #   python3 tools/fluidd_logo_css.py themes/kiln-ad5x/sidebar-logo.svg \
-#       fluidd-themes/kiln-ad5x/custom.css [logos/kiln-os-icon.svg]
+#       fluidd-themes/kiln-ad5x/custom.css [logos/kiln-os-icon-background.svg]
 import base64
 import sys
 
@@ -30,12 +30,19 @@ CSS = """\
 # Fluidd's background logo is an inline <svg class="background-logo">
 # (shown when "Show background logo" is on in Fluidd's theme settings):
 # hide its paths and paint the new logo as the element's background.
+# Fluidd fades the whole element to 8% and lets it hang well off the
+# corner; here it is fully opaque, so the logo file carries its own
+# transparency per color, and smaller and closer to the corner.
 BACKGROUND_CSS = """\
 /* Bottom right background logo, from {name}. */
 .background-logo > * {{
   display: none !important;
 }}
 .background-logo {{
+  opacity: 1 !important;
+  width: 26% !important;
+  right: -2% !important;
+  bottom: -3% !important;
   background: url("data:image/svg+xml;base64,{data}") center / contain no-repeat;
 }}
 """
