@@ -123,6 +123,65 @@ moved to `config/ff_themes_backup/` before the plugin's theme goes in. As
 on Zmod, the first backup is the one that gets restored; a later one is
 set aside next to it with the date added to its name.
 
+## Without the plugin
+
+The themes are plain files, so you can also put them on the printer by
+hand. They won't update by themselves then. Don't do both: if the plugin
+is on, uninstall it first (see above). On Zmod a hand upload would write
+into the plugin's folder through its link; on Kiln the plugin replaces the
+files at the next Klipper start.
+
+### Get the files
+
+Open the theme folder for your printer on GitHub (`themes/zmod-ad5x`,
+`themes/zmod-c5` or `themes/kiln-ad5x`) and download each file with the
+"Download raw file" button. Or use **Code > Download ZIP** and unzip it.
+
+You need every file in that folder. On Zmod, `custom.css` matters: when
+Zmod boots and `.theme` has no `custom.css`, it copies its default theme
+back over the folder, and your logo goes with it.
+
+### Upload through Mainsail
+
+1. Open **Machine** in Mainsail.
+2. In the **Config Files** panel, click the gear icon and turn on
+   **Show hidden files**.
+3. If there is no `.theme` folder, create it with the create-folder
+   button (folder icon) and name it `.theme`.
+4. Open `.theme` and upload the theme files with the upload button. Let
+   them replace the files that are already there.
+5. Reload Mainsail with Ctrl+F5.
+
+On Zmod, `.theme` in the config root is a link to `mod_data/.theme`, so the
+files end up there. That's expected.
+
+### Copy with scp
+
+| Firmware | Folder on the printer |
+| :--- | :--- |
+| Zmod (AD5X, Creator 5 Pro) | `/opt/config/mod_data/.theme/` |
+| Kiln OS | `/home/klipper/printer_data/config/.theme/` |
+
+Neither printer has an SFTP server, so use `scp -O` (the old scp protocol).
+The default password is `root` on both. From the unzipped theme folder:
+
+```sh
+# Zmod
+ssh root@<printer> 'mkdir -p /opt/config/mod_data/.theme'
+scp -O * root@<printer>:/opt/config/mod_data/.theme/
+
+# Kiln OS
+ssh root@<printer> 'mkdir -p /home/klipper/printer_data/config/.theme'
+scp -O * root@<printer>:/home/klipper/printer_data/config/.theme/
+ssh root@<printer> 'cd /home/klipper/printer_data/config && chown -R klipper:klipper .theme && chmod -R a+rX .theme'
+```
+
+The last line matters on Kiln: files copied in as root are owned by root
+and readable only by root, so Moonraker, which runs as `klipper`, can't
+serve them to Mainsail.
+
+Reload Mainsail with Ctrl+F5.
+
 ## Adding a theme
 
 1. Add a folder under `themes/`.
