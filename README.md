@@ -25,15 +25,20 @@ folder in the config files:
 
 Kiln OS ships Fluidd as its main web UI, so the Kiln theme has a Fluidd
 part too, in `fluidd-themes/kiln-ad5x`. It puts the Mainsail theme's logo
-in Fluidd's top bar, in place of Fluidd's own logo.
+in Fluidd's top bar in place of Fluidd's own logo, and the Kiln OS icon
+(`logos/kiln-os-icon.svg`) in place of the faint Fluidd logo in the page's
+bottom right corner. That one only shows while **Show background logo** is
+on in Fluidd's theme settings (the default).
 
 Fluidd reads only `custom.css` and `background.*` from its `.fluidd-theme`
 folder; there's no logo file. So `custom.css` carries the logo itself (as
 an embedded image), hides Fluidd's logo and widens the top bar's logo box
-to fit. `tools/fluidd_logo_css.py` makes it from `sidebar-logo.svg`:
+to fit, and does the same for the background logo.
+`tools/fluidd_logo_css.py` makes it from `sidebar-logo.svg` and, if given,
+a background logo:
 
 ```sh
-python3 tools/fluidd_logo_css.py themes/kiln-ad5x/sidebar-logo.svg fluidd-themes/kiln-ad5x/custom.css
+python3 tools/fluidd_logo_css.py themes/kiln-ad5x/sidebar-logo.svg fluidd-themes/kiln-ad5x/custom.css logos/kiln-os-icon.svg
 ```
 
 ## Zmod
