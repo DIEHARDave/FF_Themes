@@ -1,6 +1,6 @@
 # FF_Themes
 
-Mainsail themes for Flashforge printers, as one plugin that works on both
+Mainsail (and Fluidd) themes for Flashforge printers, as one plugin that works on both
 [Zmod](https://github.com/ghzserg/zmod) and [Kiln OS](https://github.com/djvalic/kiln-os).
 It picks the theme for the printer it's installed on and keeps it up to
 date through the update manager.
@@ -20,6 +20,21 @@ folder in the config files:
 | `sidebar-background.png` | Sidebar background |
 | `main-background.png` | Page background |
 | `custom.css` | Zmod themes only: Zmod's dialog button fix; Zmod also checks for this file on boot |
+
+### Fluidd
+
+Kiln OS ships Fluidd as its main web UI, so the Kiln theme has a Fluidd
+part too, in `fluidd-themes/kiln-ad5x`. It puts the Mainsail theme's logo
+in Fluidd's top bar, in place of Fluidd's own logo.
+
+Fluidd reads only `custom.css` and `background.*` from its `.fluidd-theme`
+folder; there's no logo file. So `custom.css` carries the logo itself (as
+an embedded image), hides Fluidd's logo and widens the top bar's logo box
+to fit. `tools/fluidd_logo_css.py` makes it from `sidebar-logo.svg`:
+
+```sh
+python3 tools/fluidd_logo_css.py themes/kiln-ad5x/sidebar-logo.svg fluidd-themes/kiln-ad5x/custom.css
+```
 
 ## Zmod
 
@@ -102,8 +117,9 @@ Then in the console (Mainsail, Fluidd or HelixScreen):
 ENABLE_PLUGIN NAME=ff_themes
 ```
 
-Klipper restarts and copies the theme into the config folder's `.theme`.
-Reload Mainsail with Ctrl+F5. Software Updates now lists `ff_themes`.
+Klipper restarts and copies the Mainsail theme into the config folder's
+`.theme` and the Fluidd theme into `.fluidd-theme`. Reload the page with
+Ctrl+F5. Software Updates now lists `ff_themes`.
 Nothing runs as root.
 
 Kiln plugins have no install script, so the plugin's Klipper module
@@ -113,8 +129,8 @@ theme. After an update, run `RESTART` to pick up new theme files.
 
 | Command | What it does |
 | :--- | :--- |
-| `FF_THEME` | Shows the installed theme and whether a backup is waiting |
-| `FF_THEME_RESTORE` | Puts back the theme from before the plugin; run it before `DISABLE_PLUGIN` |
+| `FF_THEME` | Shows the installed themes and whether a backup is waiting |
+| `FF_THEME_RESTORE` | Puts back the themes from before the plugin; run it before `DISABLE_PLUGIN` |
 
 ### Uninstall
 
@@ -124,15 +140,16 @@ DISABLE_PLUGIN NAME=ff_themes
 ```
 
 `FF_THEME_RESTORE` has to come first. Once the plugin is off, its module
-no longer loads, so nothing is left to restore the old theme. If you
-disable it without restoring, the plugin's theme just stays where it is,
-and your old theme is still in `config/ff_themes_backup/.theme`.
+no longer loads, so nothing is left to restore the old themes. If you
+disable it without restoring, the plugin's themes just stay where they
+are, and your old ones are still in `config/ff_themes_backup/`.
 
 ### Your existing theme
 
-The theme Kiln shows is a plain `.theme` folder in the config files. The
-plugin marks its own copy with a `.ff_themes` file. Any other `.theme` is
-moved to `config/ff_themes_backup/` before the plugin's theme goes in. As
+The themes are plain `.theme` (Mainsail) and `.fluidd-theme` (Fluidd)
+folders in the config files. The plugin marks its own copies with a
+`.ff_themes` file. Any other folder of that name is moved to
+`config/ff_themes_backup/` before the plugin's theme goes in. As
 on Zmod, the first backup is the one that gets restored; a later one is
 set aside next to it with the date added to its name.
 
@@ -147,7 +164,8 @@ files at the next Klipper start.
 ### Get the files
 
 Open the theme folder for your printer on GitHub (`themes/zmod-ad5x`,
-`themes/zmod-c5` or `themes/kiln-ad5x`) and download each file with the
+`themes/zmod-c5` or `themes/kiln-ad5x`; for Fluidd on Kiln,
+`fluidd-themes/kiln-ad5x`) and download each file with the
 "Download raw file" button. Or use **Code > Download ZIP** and unzip it.
 
 You need every file in that folder. On Zmod, `custom.css` matters: when
@@ -165,6 +183,10 @@ back over the folder, and your logo goes with it.
    them replace the files that are already there.
 5. Reload Mainsail with Ctrl+F5.
 
+For the Fluidd theme on Kiln, do the same in Fluidd: **Configuration**,
+show hidden files in the file list's settings, create `.fluidd-theme` and
+upload `custom.css` into it.
+
 On Zmod, `.theme` in the config root is a link to `mod_data/.theme`, so the
 files end up there. That's expected. If the old theme is still showing,
 see [Theme doesn't show up](#theme-doesnt-show-up).
@@ -175,6 +197,7 @@ see [Theme doesn't show up](#theme-doesnt-show-up).
 | :--- | :--- |
 | Zmod (AD5X, Creator 5 Pro) | `/opt/config/mod_data/.theme/` |
 | Kiln OS | `/home/klipper/printer_data/config/.theme/` |
+| Kiln OS, Fluidd | `/home/klipper/printer_data/config/.fluidd-theme/` |
 
 Neither printer has an SFTP server, so use `scp -O` (the old scp protocol).
 The default password is `root` on both. From the unzipped theme folder:
@@ -188,11 +211,16 @@ scp -O * root@<printer>:/opt/config/mod_data/.theme/
 ssh root@<printer> 'mkdir -p /home/klipper/printer_data/config/.theme'
 scp -O * root@<printer>:/home/klipper/printer_data/config/.theme/
 ssh root@<printer> 'cd /home/klipper/printer_data/config && chown -R klipper:klipper .theme && chmod -R a+rX .theme'
+
+# Kiln OS, Fluidd (from fluidd-themes/kiln-ad5x)
+ssh root@<printer> 'mkdir -p /home/klipper/printer_data/config/.fluidd-theme'
+scp -O custom.css root@<printer>:/home/klipper/printer_data/config/.fluidd-theme/
+ssh root@<printer> 'cd /home/klipper/printer_data/config && chown -R klipper:klipper .fluidd-theme && chmod -R a+rX .fluidd-theme'
 ```
 
-The last line matters on Kiln: files copied in as root are owned by root
+The `chown` lines matter on Kiln: files copied in as root are owned by root
 and readable only by root, so Moonraker, which runs as `klipper`, can't
-serve them to Mainsail.
+serve them to the web UI.
 
 Reload Mainsail with Ctrl+F5. On Zmod, if the old theme is still showing,
 see [Theme doesn't show up](#theme-doesnt-show-up).
@@ -203,7 +231,9 @@ see [Theme doesn't show up](#theme-doesnt-show-up).
 2. On Zmod, pick it in `install.sh` from the settings in Zmod's `0.sh`.
    Zmod themes need a `custom.css`, or Zmod's boot script writes one
    through the link into this repository.
-3. On Kiln, set `theme:` under `[ff_themes]` in `plugin.cfg`.
+3. On Kiln, set `theme:` under `[ff_themes]` in `plugin.cfg`. For Fluidd
+   too, add a folder of the same name under `fluidd-themes/` (see
+   [Fluidd](#fluidd)); the plugin installs it when it's there.
 
 ## License
 
