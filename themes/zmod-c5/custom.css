@@ -1,0 +1,4 @@
+.v-dialog__content .v-btn{
+  min-width: 32px !important;
+  padding: 0 4px !important;
+}

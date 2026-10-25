@@ -1,0 +1,10 @@
+{
+  "name": "ff_themes",
+  "description": "Mainsail theme for the AD5X (FF_Themes)",
+  "version": "1.0.0",
+  "author": "DIEHARDave",
+  "url": "https://github.com/DIEHARDave/FF_Themes",
+  "requires_os": "1.3",
+  "requires": [],
+  "conflicts": []
+}
