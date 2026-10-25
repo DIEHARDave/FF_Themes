@@ -21,6 +21,19 @@ folder in the config files:
 | `main-background.png` | Page background |
 | `custom.css` | Zmod themes only: Zmod's dialog button fix; Zmod also checks for this file on boot |
 
+### The images
+
+What the themes install, and where each image shows up in the web UI:
+
+| File | Image shown | Where it appears |
+| :--- | :---: | :--- |
+| `sidebar-logo.svg` | <img src="themes/zmod-ad5x/sidebar-logo.svg" width="160" alt="Zmod sidebar logo"><br>Zmod (AD5X and Creator 5 Pro)<br><br><img src="themes/kiln-ad5x/sidebar-logo.svg" width="160" alt="Kiln OS sidebar logo"><br>Kiln OS (AD5X) | **Mainsail:** top of the sidebar, above the menu<br>**Fluidd:** top bar, left corner |
+| `sidebar-background.png` | <img src="themes/zmod-ad5x/sidebar-background.png" width="60" alt="Zmod AD5X sidebar background"> <img src="themes/zmod-c5/sidebar-background.png" width="60" alt="Zmod Creator 5 Pro sidebar background"> <img src="themes/kiln-ad5x/sidebar-background.png" width="60" alt="Kiln OS AD5X sidebar background"><br>Zmod AD5X, Zmod Creator 5 Pro, Kiln OS AD5X | **Mainsail:** behind the sidebar menu |
+| `main-background.png` | <img src="themes/zmod-ad5x/main-background.png" width="240" alt="Page background"><br>All three themes | **Mainsail:** page background, behind the dashboard panels |
+| `logos/kiln-os-icon-background.svg` | <img src="logos/kiln-os-icon-background.svg" width="80" alt="Kiln OS background logo"><br>Kiln OS (AD5X) only | **Fluidd:** bottom right of the page, behind the panels. The Zmod themes keep Fluidd's own logo there. |
+
+Fluidd doesn't get the two PNG backgrounds; it only takes the logos.
+
 ### Fluidd
 
 Each theme has a Fluidd part too, in `fluidd-themes/<theme>`. It puts the
