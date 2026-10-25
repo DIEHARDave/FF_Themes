@@ -3,12 +3,16 @@
 # top bar instead of Fluidd's logo, and optionally another logo in place of
 # the faint one in the page's bottom right corner. Fluidd reads only
 # custom.css and background.* from .fluidd-theme, so the logos go in as
-# data URIs.
+# data URIs. --base puts another stylesheet first (Zmod's own Fluidd
+# custom.css, which Zmod expects to find there).
 #
 #   python3 tools/fluidd_logo_css.py themes/kiln-ad5x/sidebar-logo.svg \
-#       fluidd-themes/kiln-ad5x/custom.css [logos/kiln-os-icon-background.svg]
+#       fluidd-themes/kiln-ad5x/custom.css \
+#       --background logos/kiln-os-icon-background.svg
+#   python3 tools/fluidd_logo_css.py themes/zmod-ad5x/sidebar-logo.svg \
+#       fluidd-themes/zmod-ad5x/custom.css --base tools/zmod-fluidd-base.css
+import argparse
 import base64
-import sys
 
 CSS = """\
 /* FF_Themes: {name} in Fluidd's top bar. Made by tools/fluidd_logo_css.py
@@ -51,17 +55,26 @@ def data_uri(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
+def slash(path):
+    return path.replace("\\", "/")
+
 def main():
-    if len(sys.argv) not in (3, 4):
-        sys.exit("usage: fluidd_logo_css.py <sidebar-logo.svg> <custom.css>"
-                 " [background-logo.svg]")
-    src, out = sys.argv[1:3]
-    css = CSS.format(name=src.replace("\\", "/"), data=data_uri(src))
-    if len(sys.argv) == 4:
-        bg = sys.argv[3]
-        css += BACKGROUND_CSS.format(name=bg.replace("\\", "/"),
-                                     data=data_uri(bg))
-    with open(out, "w", newline="\n") as f:
+    ap = argparse.ArgumentParser(description="Make a Fluidd custom.css"
+                                 " with a theme's logo")
+    ap.add_argument("logo", help="sidebar-logo.svg of the Mainsail theme")
+    ap.add_argument("out", help="custom.css to write")
+    ap.add_argument("--background", help="logo for the bottom right corner")
+    ap.add_argument("--base", help="stylesheet to put first")
+    args = ap.parse_args()
+    css = ""
+    if args.base:
+        with open(args.base) as f:
+            css = "/* From %s */\n%s\n\n" % (slash(args.base), f.read().strip())
+    css += CSS.format(name=slash(args.logo), data=data_uri(args.logo))
+    if args.background:
+        css += BACKGROUND_CSS.format(name=slash(args.background),
+                                     data=data_uri(args.background))
+    with open(args.out, "w", newline="\n") as f:
         f.write(css)
 
 if __name__ == "__main__":
