@@ -1,5 +1,7 @@
 # FF_Themes
 
+> **Parts:** the printers, boards, readers and other gear that go with this project are listed at [projects.die-hard.net/gear](https://projects.die-hard.net/gear) (Amazon affiliate links).
+
 Mainsail (and Fluidd) themes for Flashforge printers, as one plugin that works on both
 [Zmod](https://github.com/ghzserg/zmod) and [Kiln OS](https://github.com/djvalic/kiln-os).
 It picks the theme for the printer it's installed on and keeps it up to
