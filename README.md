@@ -62,7 +62,7 @@ to fit, and does the same for the background logo.
 optional background logo and a stylesheet to put first:
 
 ```sh
-python3 tools/fluidd_logo_css.py themes/kiln-ad5x/sidebar-logo.svg fluidd-themes/kiln-ad5x/custom.css --background logos/kiln-os-icon-background.svg
+python3 tools/fluidd_logo_css.py themes/kiln-ad5x/sidebar-logo.svg fluidd-themes/kiln-ad5x/custom.css --background logos/kiln-os-icon-background.svg --fill
 python3 tools/fluidd_logo_css.py themes/zmod-ad5x/sidebar-logo.svg fluidd-themes/zmod-ad5x/custom.css --base tools/zmod-fluidd-base.css
 python3 tools/fluidd_logo_css.py themes/zmod-c5/sidebar-logo.svg fluidd-themes/zmod-c5/custom.css --base tools/zmod-fluidd-base.css
 ```

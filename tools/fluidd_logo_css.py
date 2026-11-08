@@ -8,24 +8,25 @@
 #
 #   python3 tools/fluidd_logo_css.py themes/kiln-ad5x/sidebar-logo.svg \
 #       fluidd-themes/kiln-ad5x/custom.css \
-#       --background logos/kiln-os-icon-background.svg
+#       --background logos/kiln-os-icon-background.svg --fill
 #   python3 tools/fluidd_logo_css.py themes/zmod-ad5x/sidebar-logo.svg \
 #       fluidd-themes/zmod-ad5x/custom.css --base tools/zmod-fluidd-base.css
 import argparse
 import base64
+import re
 
 CSS = """\
 /* FF_Themes: {name} in Fluidd's top bar. Made by tools/fluidd_logo_css.py
    from the Mainsail theme's sidebar-logo.svg; edit that and run it again. */
 .toolbar-logo {{
   width: auto !important;
-  padding: 0 10px;
+  padding: {padding};
 }}
 .logo-wrapper svg {{
   display: none !important;
 }}
 .logo-wrapper {{
-  width: 100px;
+  width: {width}px;
   height: 48px;
   background: url("data:image/svg+xml;base64,{data}") center / contain no-repeat;
 }}
@@ -55,6 +56,15 @@ def data_uri(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
+# Width that shows the whole logo at the top bar's full 48px height, from
+# the svg's viewBox (or width/height).
+def fill_width(path):
+    with open(path, encoding="utf-8") as f:
+        svg = f.read()
+    m = re.search(r'viewBox="\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)', svg)
+    w, h = float(m.group(1)), float(m.group(2))
+    return round(48 * w / h)
+
 def slash(path):
     return path.replace("\\", "/")
 
@@ -65,12 +75,19 @@ def main():
     ap.add_argument("out", help="custom.css to write")
     ap.add_argument("--background", help="logo for the bottom right corner")
     ap.add_argument("--base", help="stylesheet to put first")
+    ap.add_argument("--fill", action="store_true",
+                    help="fill the top bar's logo box, no padding")
     args = ap.parse_args()
     css = ""
     if args.base:
         with open(args.base) as f:
             css = "/* From %s */\n%s\n\n" % (slash(args.base), f.read().strip())
-    css += CSS.format(name=slash(args.logo), data=data_uri(args.logo))
+    if args.fill:
+        padding, width = "0 !important", fill_width(args.logo)
+    else:
+        padding, width = "0 10px", 100
+    css += CSS.format(name=slash(args.logo), data=data_uri(args.logo),
+                      padding=padding, width=width)
     if args.background:
         css += BACKGROUND_CSS.format(name=slash(args.background),
                                      data=data_uri(args.background))
