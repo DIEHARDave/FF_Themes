@@ -1,0 +1,7 @@
+/* Bigger sidebar logo: Mainsail draws it 32px high in the 48px top bar
+   (and in the mobile menu header). */
+.topbar .nav-logo,
+.nav-logo {
+  height: 44px !important;
+  width: auto !important;
+}
