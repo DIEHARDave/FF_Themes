@@ -22,10 +22,12 @@ CSS = """\
   width: auto !important;
   padding: {padding};
 }}
-.logo-wrapper svg {{
+.logo-wrapper svg,
+.app-icon svg {{
   display: none !important;
 }}
-.logo-wrapper {{
+.logo-wrapper,
+.app-icon {{
   width: {width}px;
   height: 48px;
   background: url("data:image/svg+xml;base64,{data}") center / contain no-repeat;
