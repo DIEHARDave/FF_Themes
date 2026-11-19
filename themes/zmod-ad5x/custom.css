@@ -3,3 +3,10 @@
   padding: 0 4px !important;
   margin:0 2px !important;
 }
+
+/* Sidebar links that open a new tab (diehard-pushraker's "Push
+   notifications") keep the focus in this tab, and Vuetify's focus overlay
+   leaves them highlighted like the current page. Hover still shows. */
+.v-navigation-drawer a.v-list-item[target="_blank"]:focus:not(:hover)::before {
+  opacity: 0 !important;
+}
