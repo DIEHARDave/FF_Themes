@@ -18,6 +18,10 @@ import time
 
 PLUGIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MARK = ".ff_themes"
+# Files other plugins put in .theme that a theme switch must keep:
+# navi.json holds Mainsail's custom sidebar links (diehard-pushraker's
+# "Push notifications"). A theme that ships its own still replaces it.
+KEEP = ("navi.json",)
 # (folder in this plugin, folder in the config directory, UI)
 KINDS = (("themes", ".theme", "Mainsail"),
          ("fluidd-themes", ".fluidd-theme", "Fluidd"))
@@ -65,7 +69,7 @@ class ThemeDir:
                 shutil.copyfile(src, dst)
                 changed += 1
         for fn in os.listdir(self.target):
-            if fn != MARK and fn not in wanted:
+            if fn != MARK and fn not in wanted and fn not in KEEP:
                 path = os.path.join(self.target, fn)
                 if os.path.isdir(path) and not os.path.islink(path):
                     shutil.rmtree(path)
